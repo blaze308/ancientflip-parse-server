@@ -21,7 +21,7 @@ async function startServer() {
   const dashboardConfig = {
     apps: [
       {
-        serverURL: serverConfig.serverURL,
+        serverURL: serverConfig.serverURL || 'https://ancientflip-parse-server.onrender.com/parse',
         appId: serverConfig.appId,
         masterKey: serverConfig.masterKey,
         appName: process.env.APP_NAME || 'AncientFlip',
