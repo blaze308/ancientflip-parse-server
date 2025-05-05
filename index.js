@@ -24,13 +24,13 @@ async function startServer() {
         serverURL: serverConfig.serverURL,
         appId: serverConfig.appId,
         masterKey: serverConfig.masterKey,
-        appName: process.env.APP_NAME || 'AncientFlip',
+        appName: process.env.APP_NAME,
       },
     ],
     users: [
       {
-        user: process.env.DASHBOARD_USER || 'admin',
-        pass: process.env.DASHBOARD_PASSWORD || 'password',
+        user: process.env.DASHBOARD_USER,
+        pass: process.env.DASHBOARD_PASSWORD,
       },
     ],
     useEncryptedPasswords: true,
