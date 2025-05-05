@@ -71,6 +71,11 @@ npm run dev
 
 Your Parse Server is now running at [http://localhost:1337/parse](http://localhost:1337/parse)
 
+Parse Dashboard is available at [http://localhost:1337/dashboard](http://localhost:1337/dashboard)
+
+- Default username: `admin`
+- Default password: `password`
+
 ## 🚢 Deployment
 
 ### Deploy to Render
@@ -94,6 +99,10 @@ Your Parse Server is now running at [http://localhost:1337/parse](http://localho
    PARSE_SERVER_DATABASE_URI=YOUR_MONGODB_CONNECTION_STRING
    PARSE_SERVER_URL=https://your-render-url.com/parse
    PARSE_SERVER_CLOUD=./cloud/main.js
+   APP_NAME=YourAppName
+   DASHBOARD_USER=your_secure_username
+   DASHBOARD_PASSWORD=your_secure_password
+   NODE_ENV=production
    PORT=10000
    ```
 

@@ -1,29 +1,66 @@
 require('dotenv').config();
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
+const ParseDashboard = require('parse-dashboard');
 
 async function startServer() {
   const app = express();
 
-  const server = new ParseServer({
-    databaseURI:
-      process.env.PARSE_SERVER_DATABASE_URI ||
-      'mongodb+srv://admin:admin@e2e-test-db.vkml0lr.mongodb.net/ancientflip-test-db?retryWrites=true&w=majority',
+  // Parse Server configuration
+  const serverConfig = {
+    databaseURI: process.env.PARSE_SERVER_DATABASE_URI,
     cloud: process.env.PARSE_SERVER_CLOUD || './cloud/main.js',
-    appId: process.env.PARSE_SERVER_APPLICATION_ID || 'A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV',
-    masterKey: process.env.PARSE_SERVER_MASTER_KEY || 'gZOAivmFs42VSfzczvDuQ0dlCOGJP4g3KbzbK3PM',
-    serverURL: process.env.PARSE_SERVER_URL || 'http://localhost:1337/parse',
-  });
+    appId: process.env.PARSE_SERVER_APPLICATION_ID,
+    masterKey: process.env.PARSE_SERVER_MASTER_KEY,
+    serverURL: process.env.PARSE_SERVER_URL,
+  };
 
-  // Start server
+  const server = new ParseServer(serverConfig);
+
+  // Parse Dashboard configuration
+  const dashboardConfig = {
+    apps: [
+      {
+        serverURL: serverConfig.serverURL,
+        appId: serverConfig.appId,
+        masterKey: serverConfig.masterKey,
+        appName: process.env.APP_NAME || 'AncientFlip',
+      },
+    ],
+    users: [
+      {
+        user: process.env.DASHBOARD_USER || 'admin',
+        pass: process.env.DASHBOARD_PASSWORD || 'password',
+      },
+    ],
+    useEncryptedPasswords: true,
+  };
+
+  // For development environments - REMOVE IN PRODUCTION
+  const dashboardOptions = {
+    allowInsecureHTTP: process.env.NODE_ENV !== 'production',
+  };
+
+  const dashboard = new ParseDashboard(dashboardConfig, dashboardOptions);
+
+  // Start Parse Server
   await server.start();
 
-  // Serve the Parse API on the /parse URL prefix
+  // Mount Parse Server on /parse path
   app.use('/parse', server.app);
 
-  app.listen(process.env.PORT || 1337, function () {
+  // Mount Parse Dashboard on /dashboard path
+  app.use('/dashboard', dashboard);
+
+  // Start the Express app
+  const httpServer = require('http').createServer(app);
+  httpServer.listen(process.env.PORT || 1337, function () {
     // eslint-disable-next-line no-console
-    console.log(`parse-server running on port ${process.env.PORT || 1337}.`);
+    console.log(
+      `Server running on port ${
+        process.env.PORT || 1337
+      } with Parse Server at /parse and Dashboard at /dashboard`
+    );
   });
 }
 
