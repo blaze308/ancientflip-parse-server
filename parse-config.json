@@ -1,0 +1,11 @@
+{
+  "appId": "A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV",
+  "masterKey": "gZOAivmFs42VSfzczvDuQ0dlCOGJP4g3KbzbK3PM",
+  "clientKey": "A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV",
+  "restAPIKey": "A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV",
+  "databaseURI": "mongodb+srv://admin:admin@e2e-test-db.vkml0lr.mongodb.net/ancientflip-test-db?retryWrites=true&w=majority",
+  "publicServerURL": "http://localhost:1337/parse",
+  "serverURL": "http://localhost:1337/parse",
+  "mountPath": "/parse",
+  "masterKeyIps": ["0.0.0.0/0", "::0"]
+}
