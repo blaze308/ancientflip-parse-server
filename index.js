@@ -24,16 +24,16 @@ async function startServer() {
         serverURL: serverConfig.serverURL,
         appId: serverConfig.appId,
         masterKey: serverConfig.masterKey,
-        appName: process.env.APP_NAME,
+        appName: process.env.APP_NAME || 'AncientFlip',
       },
     ],
     users: [
       {
-        user: process.env.DASHBOARD_USER,
-        pass: process.env.DASHBOARD_PASSWORD,
+        user: process.env.DASHBOARD_USER || 'admin',
+        pass: process.env.DASHBOARD_PASSWORD || 'password',
       },
     ],
-    useEncryptedPasswords: true,
+    useEncryptedPasswords: false,
   };
 
   // For development environments - REMOVE IN PRODUCTION
@@ -54,6 +54,7 @@ async function startServer() {
 
   // Start the Express app
   const httpServer = require('http').createServer(app);
+
   httpServer.listen(process.env.PORT || 1337, function () {
     // eslint-disable-next-line no-console
     console.log(
