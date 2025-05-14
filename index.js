@@ -7,11 +7,8 @@ async function startServer() {
   const app = express();
 
   // Define server URLs
-  const serverURL =
-    process.env.PARSE_SERVER_URL || 'https://ancientflip-parse-server.onrender.com/parse';
-  const publicServerURL = process.env.PUBLIC_SERVER_URL || serverURL;
-  const websocketURL =
-    process.env.PARSE_WEBSOCKET_URL || 'wss://ancientflip-parse-server.onrender.com';
+  const serverURL = 'https://ancientflip-parse-server.onrender.com/parse';
+  const websocketURL = 'wss://ancientflip-parse-server.onrender.com';
   const websocketTimeout = parseInt(process.env.WEBSOCKET_TIMEOUT) || 60000;
 
   // Parse Server configuration
@@ -22,6 +19,8 @@ async function startServer() {
     masterKey: process.env.PARSE_SERVER_MASTER_KEY,
     serverURL: serverURL,
     publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
+    websocketTimeout: websocketTimeout,
+    websocketServerURL: websocketURL,
     liveQuery: {
       classNames: [
         'LiveStreamingModel',
@@ -40,8 +39,6 @@ async function startServer() {
         'PostsModel',
         'ObtainedItemsModel',
       ],
-      websocketTimeout: websocketTimeout,
-      websocketServerURL: websocketURL,
     },
     fileUpload: {
       enableForPublic: true,
