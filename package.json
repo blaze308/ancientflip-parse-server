@@ -17,7 +17,7 @@
     "parse-server-simple-mailgun-adapter": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^8.50.0",
+    "eslint": "^9.26.0",
     "nodemon": "^3.0.1"
   },
   "engines": {
