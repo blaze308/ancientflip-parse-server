@@ -19,12 +19,10 @@ async function startServer() {
     masterKey: process.env.PARSE_SERVER_MASTER_KEY,
     serverURL: serverURL,
     publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
-    websocketTimeout: websocketTimeout,
-    websocketServerURL: websocketURL,
     appName: 'AncientFlip',
     // Email configuration for password reset
     emailAdapter: {
-      module: '@parse/simple-mailgun-adapter',
+      module: 'parse-server-simple-mailgun-adapter',
       options: {
         // Get these from environment variables or use defaults for testing
         fromAddress: process.env.EMAIL_FROM_ADDRESS || 'no-reply@ancientflip.com',
