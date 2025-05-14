@@ -21,7 +21,7 @@ async function startServer() {
     appId: process.env.PARSE_SERVER_APPLICATION_ID,
     masterKey: process.env.PARSE_SERVER_MASTER_KEY,
     serverURL: serverURL,
-    publicServerURL: publicServerURL,
+    publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
     liveQuery: {
       classNames: [
         'LiveStreamingModel',
@@ -42,6 +42,11 @@ async function startServer() {
       ],
       websocketTimeout: websocketTimeout,
       websocketServerURL: websocketURL,
+    },
+    fileUpload: {
+      enableForPublic: true,
+      enableForAuthenticatedUser: true,
+      enableForAnonymousUser: true,
     },
   };
 
