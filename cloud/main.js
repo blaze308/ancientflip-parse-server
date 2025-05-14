@@ -43,3 +43,26 @@ Parse.Cloud.define('getUserByEmail', async request => {
     username: user.get('username'),
   };
 });
+
+Parse.Cloud.define('resetUserPassword', async request => {
+  const { username, newPassword } = request.params;
+
+  try {
+    // Query for the user
+    const query = new Parse.Query(Parse.User);
+    query.equalTo('username', username);
+    const user = await query.first({ useMasterKey: true });
+
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    // Set new password (this will properly hash it)
+    user.setPassword(newPassword);
+    await user.save(null, { useMasterKey: true });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+});
