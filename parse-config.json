@@ -4,8 +4,8 @@
   "clientKey": "A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV",
   "restAPIKey": "A8910qm5BYBajmEt8zONLLSgv7IhgWUI0aPTwsbV",
   "databaseURI": "mongodb+srv://admin:admin@e2e-test-db.vkml0lr.mongodb.net/ancientflip-test-db?retryWrites=true&w=majority",
-  "publicServerURL": "http://localhost:1337/parse",
-  "serverURL": "http://localhost:1337/parse",
+  "publicServerURL": "https://ancientflip-parse-server.onrender.com/parse",
+  "serverURL": "https://ancientflip-parse-server.onrender.com/parse",
   "mountPath": "/parse",
   "masterKeyIps": ["0.0.0.0/0", "::0"]
 }
