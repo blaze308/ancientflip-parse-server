@@ -20,6 +20,8 @@ async function startServer() {
     serverURL: serverURL,
     publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
     appName: 'AncientFlip',
+    // Enable CORS
+    allowCrossDomain: true,
     // Email configuration for password reset
     emailAdapter: {
       module: 'parse-server-simple-mailgun-adapter',
@@ -76,6 +78,23 @@ async function startServer() {
   };
 
   const server = new ParseServer(serverConfig);
+
+  // Add global CORS middleware to Express
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'X-Parse-Application-Id, X-Parse-REST-API-Key, X-Parse-Javascript-Key, X-Parse-Client-Key, X-Parse-Master-Key, X-Parse-Session-Token, Content-Type, X-Requested-With'
+    );
+
+    // Intercept OPTIONS method
+    if ('OPTIONS' === req.method) {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  });
 
   // Parse Dashboard configuration
   const dashboardConfig = {
