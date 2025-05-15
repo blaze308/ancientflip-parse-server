@@ -64,3 +64,104 @@ Parse.Cloud.define('resetUserPassword', async request => {
     return { success: false, message: error.message };
   }
 });
+
+Parse.Cloud.define('resetPassword', async request => {
+  const { username, email, phone_number, newPassword } = request.params;
+
+  if (!newPassword) {
+    throw new Parse.Error(141, 'New password is required');
+  }
+
+  // At least one identifier is required
+  if (!username && !email && !phone_number) {
+    throw new Parse.Error(141, 'Username, email, or phone number is required');
+  }
+
+  // Find the user by the provided identifier
+  const query = new Parse.Query(Parse.User);
+
+  if (username) {
+    query.equalTo('username', username);
+  } else if (email) {
+    query.equalTo('email', email);
+  } else if (phone_number) {
+    query.equalTo('phone_number', phone_number);
+  }
+
+  try {
+    const user = await query.first({ useMasterKey: true });
+
+    if (!user) {
+      throw new Parse.Error(101, 'User not found');
+    }
+
+    // Set the new password
+    user.setPassword(newPassword);
+
+    // Save the user with master key to bypass security
+    await user.save(null, { useMasterKey: true });
+
+    return {
+      success: true,
+      message: 'Password has been reset successfully',
+    };
+  } catch (error) {
+    throw new Parse.Error(
+      error.code || 500,
+      error.message || 'An error occurred while resetting the password'
+    );
+  }
+});
+
+// For migrating users from old server to new server
+Parse.Cloud.define('migrateUser', async request => {
+  const { username, email, phone_number, oldPassword, newPassword } = request.params;
+
+  // At least one identifier is required
+  if (!username && !email && !phone_number) {
+    throw new Parse.Error(141, 'Username, email, or phone number is required');
+  }
+
+  if (!newPassword) {
+    throw new Parse.Error(141, 'New password is required');
+  }
+
+  // Find the user by the provided identifier
+  const query = new Parse.Query(Parse.User);
+
+  if (username) {
+    query.equalTo('username', username);
+  } else if (email) {
+    query.equalTo('email', email);
+  } else if (phone_number) {
+    query.equalTo('phone_number', phone_number);
+  }
+
+  try {
+    const user = await query.first({ useMasterKey: true });
+
+    if (!user) {
+      throw new Parse.Error(101, 'User not found');
+    }
+
+    // Set the new password and update user status if needed
+    user.setPassword(newPassword);
+
+    // Add any additional migration logic here
+    // For example, updating user metadata about the migration
+    user.set('passwordMigrated', true);
+
+    // Save the user with master key to bypass security
+    await user.save(null, { useMasterKey: true });
+
+    return {
+      success: true,
+      message: 'User migrated successfully with new password',
+    };
+  } catch (error) {
+    throw new Parse.Error(
+      error.code || 500,
+      error.message || 'An error occurred during user migration'
+    );
+  }
+});
