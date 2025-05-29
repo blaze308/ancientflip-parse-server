@@ -20,16 +20,13 @@ async function startServer() {
     serverURL: serverURL,
     publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
     appName: 'AncientFlip',
-    // Enable CORS
-    allowCrossDomain: true,
     // Email configuration for password reset
     emailAdapter: {
       module: 'parse-server-simple-mailgun-adapter',
       options: {
-        // Get these from environment variables or use defaults for testing
         fromAddress: process.env.EMAIL_FROM_ADDRESS || 'no-reply@ancientflip.com',
-        domain: process.env.MAILGUN_DOMAIN || 'your-mailgun-domain.com',
-        apiKey: process.env.MAILGUN_API_KEY || 'your-mailgun-api-key',
+        domain: process.env.MAILGUN_DOMAIN,
+        apiKey: process.env.MAILGUN_API_KEY,
         // Email templates
         templates: {
           passwordResetEmail: {
@@ -37,7 +34,6 @@ async function startServer() {
             pathPlainText: __dirname + '/email-templates/password-reset-email.txt',
             pathHtml: __dirname + '/email-templates/password-reset-email.html',
             callback: user => {
-              // You can return additional variables to use in the email template
               return {
                 username: user.get('username'),
               };
@@ -74,6 +70,29 @@ async function startServer() {
       enableForPublic: true,
       enableForAuthenticatedUser: true,
       enableForAnonymousUser: true,
+    },
+    // Security settings
+    enableInsecureAuthAdapters: false,
+    // Parse object encoding
+    encodeParseObjectInCloudFunction: true,
+    // ACL settings
+    enforcePrivateUsers: false,
+    defaultACL: {
+      '*': {
+        read: true,
+        write: true,
+      },
+    },
+    defaultACLOnlyAuthenticatedUser: false,
+    // Class-level permissions - allow public read/write access
+    classLevelPermissions: {
+      _User: {
+        get: ['*'],
+        find: ['*'],
+        create: ['*'],
+        update: ['*'],
+        delete: ['*'],
+      },
     },
   };
 
