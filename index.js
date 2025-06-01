@@ -75,7 +75,7 @@ async function startServer() {
     enableInsecureAuthAdapters: false,
     // Parse object encoding
     encodeParseObjectInCloudFunction: true,
-    // ACL settings
+    // ACL settings - Public read and write for everything
     enforcePrivateUsers: false,
     defaultACL: {
       '*': {
@@ -84,9 +84,9 @@ async function startServer() {
       },
     },
     defaultACLOnlyAuthenticatedUser: false,
-    // Class-level permissions - allow public read/write access
+    // Class-level permissions - Public access for everything
     classLevelPermissions: {
-      _User: {
+      '*': {
         get: ['*'],
         find: ['*'],
         create: ['*'],
