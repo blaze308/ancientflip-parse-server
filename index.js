@@ -20,33 +20,7 @@ async function startServer() {
     serverURL: serverURL,
     publicServerURL: 'https://ancientflip-parse-server.onrender.com/parse',
     appName: 'AncientFlip',
-    // Email configuration for password reset
-    emailAdapter: {
-      module: 'parse-server-simple-mailgun-adapter',
-      options: {
-        fromAddress: process.env.EMAIL_FROM_ADDRESS || 'no-reply@ancientflip.com',
-        domain: process.env.MAILGUN_DOMAIN,
-        apiKey: process.env.MAILGUN_API_KEY,
-        // Email templates
-        templates: {
-          passwordResetEmail: {
-            subject: 'Reset your password for AncientFlip',
-            pathPlainText: __dirname + '/email-templates/password-reset-email.txt',
-            pathHtml: __dirname + '/email-templates/password-reset-email.html',
-            callback: user => {
-              return {
-                username: user.get('username'),
-              };
-            },
-          },
-          verificationEmail: {
-            subject: 'Please verify your email for AncientFlip',
-            pathPlainText: __dirname + '/email-templates/verification-email.txt',
-            pathHtml: __dirname + '/email-templates/verification-email.html',
-          },
-        },
-      },
-    },
+    // Email configuration removed - not using Mailgun anymore
     liveQuery: {
       classNames: [
         'LiveStreamingModel',
@@ -77,23 +51,16 @@ async function startServer() {
     encodeParseObjectInCloudFunction: true,
     // ACL settings - Public read and write for everything
     enforcePrivateUsers: false,
-    defaultACL: {
-      '*': {
-        read: true,
-        write: true,
-      },
-    },
-    defaultACLOnlyAuthenticatedUser: false,
-    // Class-level permissions - Public access for everything
-    classLevelPermissions: {
-      '*': {
-        get: ['*'],
-        find: ['*'],
-        create: ['*'],
-        update: ['*'],
-        delete: ['*'],
-      },
-    },
+
+    // REMOVED DEPRECATED CONFIGURATIONS:
+    // - defaultACL (deprecated - handle ACLs programmatically)
+    // - defaultACLOnlyAuthenticatedUser (deprecated)
+    // - classLevelPermissions (deprecated - use dashboard or programmatic approach)
+
+    // If you need public access, handle it through:
+    // 1. Cloud functions
+    // 2. Parse Dashboard class-level permissions
+    // 3. Programmatic ACL setting in your app code
   };
 
   const server = new ParseServer(serverConfig);
